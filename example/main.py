@@ -3,6 +3,6 @@ import sys
 from scrapy.cmdline import execute
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-# execute(["scrapy", "crawl", "jianshu"])
+execute(["scrapy", "crawl", "jianshu"])
 # execute(["scrapy", "crawl", "jianshu_image"])
-execute(["scrapy", "crawl", "music"])
+# execute(["scrapy", "crawl", "music"])

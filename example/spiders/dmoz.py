@@ -1,3 +1,5 @@
+import time
+
 from scrapy import Request
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
@@ -9,7 +11,7 @@ import json
 class DmozSpider(CrawlSpider):
     name = 'jianshu'
     allowed_domains = ['jianshu.com']
-    subjects = ["HighCharts"]
+    subjects = ["ios"]
     rules = [
         Rule(LinkExtractor(allow=r'.*/p/[0-9a-z]{12}.*'), callback='parse_detail'),
     ]
@@ -23,6 +25,7 @@ class DmozSpider(CrawlSpider):
             for num in range(1, 200):
                 request = Request("https://www.jianshu.com/search?q=" + subject + "&page=" + str(num) + "&type=note")
                 request.meta["subject"] = subject
+                time.sleep(1)
                 yield request
 
     def parse_detail(self, response):
