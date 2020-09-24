@@ -47,6 +47,16 @@ class JianshuspiderPipeline:
         print('============================', failure, item)
 
     def db_insert(self, cursor, item):
+        tt = cursor._connection._connection
+        try:
+            tt.ping()
+        except Exception as e:
+            print("=======" + e)
+            self.dbpool.close()
+            settings = MY_SETTINGS
+            settings['cursorclass'] = cursors.DictCursor
+            self.dbpool = adbapi.ConnectionPool("pymysql", **settings)
+
         print("添加数据========================")
         cursor.execute(
             INSERT_SQL,

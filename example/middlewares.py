@@ -31,7 +31,6 @@ class SeleniumDownloadMiddleware(object):
         self.driver = webdriver.Chrome(executable_path=path + "/chromedriver", chrome_options=chrome_options)
 
     def process_request(self, request, spider):
-        print(request)
         self.driver.get(request.url)
         time.sleep(0.5)
         try:
