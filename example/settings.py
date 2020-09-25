@@ -31,7 +31,7 @@ ITEM_PIPELINES = {
 DOWNLOADER_MIDDLEWARES = {
     'example.middlewares.SeleniumDownloadMiddleware': 543,
     # 'example.middlewares.SeleniumDownloadMusicMiddleware': 543,
-    # 'example.middlewares.MyproxiesSpiderMiddleware': 125,
+    'example.middlewares.MyproxiesSpiderMiddleware': 125,
 }
 ROBOTSTXT_OBEY = False
 # 配置文件的下载路径

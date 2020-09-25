@@ -28,7 +28,8 @@ class SeleniumDownloadMiddleware(object):
         chrome_options.add_argument('--headless')
         chrome_options.add_argument('--disable-gpu')
         path = os.path.dirname(os.path.abspath(__file__))
-        self.driver = webdriver.Chrome(executable_path=path + "/chromedriver", chrome_options=chrome_options)
+        # self.driver = webdriver.Chrome(executable_path=path + "/chromedriver", chrome_options=chrome_options)
+        self.driver = webdriver.Chrome(executable_path=path + "/chromedriver")
 
     def process_request(self, request, spider):
         self.driver.get(request.url)
@@ -87,8 +88,8 @@ class SeleniumDownloadMusicMiddleware(object):
         chrome_options.add_argument('--headless')
         chrome_options.add_argument('--disable-gpu')
         path = os.path.dirname(os.path.abspath(__file__))
-        # self.driver = webdriver.Chrome(executable_path=path + "/chromedriver", chrome_options=chrome_options)
-        self.driver = webdriver.Chrome(executable_path=path + "/chromedriver")
+        self.driver = webdriver.Chrome(executable_path=path + "/chromedriver", chrome_options=chrome_options)
+        # self.driver = webdriver.Chrome(executable_path=path + "/chromedriver")
         # self.driver.set_window_size(400, 800)  # 分辨率 1024*768
         time.sleep(1)
 

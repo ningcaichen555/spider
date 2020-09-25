@@ -1,6 +1,7 @@
 import time
 from logging import info
 
+import scrapy
 from scrapy import Request
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
@@ -11,8 +12,9 @@ import json
 
 class DmozSpider(CrawlSpider):
     name = 'jianshu'
-    allowed_domains = ['https://www.jianshu.com']
-    subjects = ["ios"]
+    t = 0
+    allowed_domains = ['www.jianshu.com', 'jianshu.com']
+    subjects = ["python", "c++", "c", "html", "vue", "mysql", "nosql", "linux"]
 
     # rules = [
     #     Rule(LinkExtractor(allow=r'.*/p/[0-9a-z]{12}.*'), callback='parse_detail'),
@@ -28,11 +30,13 @@ class DmozSpider(CrawlSpider):
         # 正则表达式 Maven NumPy ASP AppMl VB SQlite MongoDb Redis Swift Ionic Kotlin Xml DTD XmlDom XSLT Xpath Xquery Xlink Xpointer XmlSchema
         # SVG ASP.NET C# WebFroms webService WSDL SOAP RSS RDF Eclipse Git Svn MarkDown HTTP W3C TCP/IP androidStudio as vsCode Pycharm PhpStorm subLime
         for subject in self.subjects:
-            for num in range(1, 200):
-                request = Request("https://www.jianshu.com/search?q=" + subject + "&page=" + str(num) + "&type=note",
-                                  headers={'Connection': 'close'}, callback=self.parse, dont_filter=True)
+            for num in range(0, 100):
+                request = Request(
+                    "https://www.jianshu.com/search?q=" + subject + "&page=" + str(num) + "&type=note",
+                    dont_filter=True,
+                    headers={'Connection': 'close'}, callback=self.parse)
                 request.meta["subject"] = subject
-                time.sleep(1)
+                time.sleep(10)
                 yield request
 
     def parse(self, response, **kwargs):
@@ -41,12 +45,15 @@ class DmozSpider(CrawlSpider):
         links = linkExt.extract_links(response)
         if links:
             for link in links:
-                print("dmoz==link==" + str(link))
-                linkRequest = Request(str(link), callback=self.parse_detail,
-                                      headers={'Connection': 'close', 'refer': str(response.url)})
-                yield linkRequest
+                request = Request(str(link.url), callback=self.parse_detail,
+                                  headers={'Connection': 'close', 'refer': str(response.url)})
+                request.meta["subject"] = response.meta['subject']
+                time.sleep(5)
+                yield request
 
     def parse_detail(self, response):
+        self.t += 1
+        print("dmoz==times" + str(self.t))
         print("dmoz==response==" + str(response.url))
         article_itemLoader = ArticelItemLoader(item=JianshuspiderItem(), response=response)
         json_response = response.xpath("//script[@id='__NEXT_DATA__']//text()").get()
@@ -66,7 +73,7 @@ class DmozSpider(CrawlSpider):
         article_itemLoader.add_value("view_count", note_dict.get("views_count"))
         article_itemLoader.add_value("comment_count", note_dict.get("comments_count"))
         article_itemLoader.add_value("like_count", note_dict.get("likes_count"))
-        article_itemLoader.add_value("subjects", self.subjects[0])
+        article_itemLoader.add_value("subjects", response.meta['subject'])
         item = article_itemLoader.load_item()
         yield item
         # url_list = response.xpath("//ul[@class='note-list']/li/div/a/@href").extract()
