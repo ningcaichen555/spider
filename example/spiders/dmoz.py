@@ -14,7 +14,7 @@ class DmozSpider(CrawlSpider):
     name = 'jianshu'
     t = 0
     allowed_domains = ['www.jianshu.com', 'jianshu.com']
-    subjects = ["python", "c++", "c", "html", "vue", "mysql", "nosql", "linux"]
+    subjects = ["nosql", "linux"]
 
     # rules = [
     #     Rule(LinkExtractor(allow=r'.*/p/[0-9a-z]{12}.*'), callback='parse_detail'),
