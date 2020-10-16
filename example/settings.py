@@ -23,7 +23,6 @@ SCHEDULER_PERSIST = True
 ITEM_PIPELINES = {
     'example.pipelines.JianshuspiderPipeline': 300,
     'scrapy_redis.pipelines.RedisPipeline': 400,
-
     # 'example.pipelines.SaveImagePipeline': 1,
     # 'example.pipelines.UploadImagePipeline': 2,
     # 'example.pipelines.SelfDefineFilePipline': 1,
